@@ -16,7 +16,7 @@ class _SignInState extends State<SignIn> {
   bool validated = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String email;
+  late String email = email;
 
   TextEditingController emailController = TextEditingController();
   bool isPassValidated = true;
@@ -109,33 +109,32 @@ class _SignInState extends State<SignIn> {
                     //   ),
                     // ),
                     child: TextFormField(
-                      textInputAction: TextInputAction.done,
-                      autofocus: true,
-                      onChanged: (val) {
-                        setState(() {});
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.lightBlue),
-                        hintText: 'username@email.com',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: emailController,
-                      validator: (value) {
-                        Pattern pattern =
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                        RegExp regex = RegExp(pattern.toString());
+                        textInputAction: TextInputAction.done,
+                        autofocus: true,
+                        onChanged: (val) {
+                          setState(() {});
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: TextStyle(color: Colors.lightBlue),
+                          hintText: 'username@email.com',
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: emailController,
+                        validator: (value) {
+                          Pattern pattern =
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regex = RegExp(pattern.toString());
+                          if (value!.isEmpty) {
+                            return 'Please enter your email';
+                          } else if (!regex.hasMatch(value)) {
+                            return 'Enter Valid Email';
+                          }
 
-                        if (value!.isEmpty) {
-                          return 'please enter your email';
-                        } else if (value.length < 8) {
-                          return 'Email should be more than 7 characters';
-                        }
-                        return null;
-                      },
-                    ),
+                          return null;
+                        }),
                   ),
                   SizedBox(height: screenSize.height * 0.049),
                   Visibility(
@@ -144,18 +143,14 @@ class _SignInState extends State<SignIn> {
                         color: Colors.lightBlue,
                         label: 'Next',
                         onpressedfunction: () {
-                          if (kDebugMode) {
-                            print(email);
-                          }
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: PasswordScreen(
-                                      email: email,
-                                    ),
-                                    type: PageTransitionType.rightToLeft));
-                          }
+                          if (!_formKey.currentState!.validate()) return;
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: PasswordScreen(
+                                    email: email,
+                                  ),
+                                  type: PageTransitionType.rightToLeft));
                         }),
                   )
                 ],
