@@ -1,48 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:map/Sing_in/email.dart';
 
 void main() {
-  runApp(new MaterialApp(
-    home: new MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _State createState() => new _State();
-}
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-class _State extends State<MyApp> {
-
-  late bool _visible;
-
-
-  @override
-  void initState() {
-    _visible = true;
-  }
-
-  void _toggleVisible() {
-    setState(() {
-      _visible = !_visible;
-    });
-  }
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Name here'),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
       ),
-      body: new Container(
-        padding: new EdgeInsets.all(32.0),
-        child: new Column(
-          children: <Widget>[
-            new Opacity(opacity: _visible ? 1.0 : 0.2,
-                child: new Text('Now you see me now you don\'t!')),
-            new RaisedButton(onPressed: _toggleVisible, child: new Text('Toggle'),)
-          ],
-        ),
-      ),
+      home: const SignIn(),
     );
   }
 }
+
