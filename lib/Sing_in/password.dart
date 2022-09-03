@@ -8,9 +8,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../widgets/on-board_button.dart';
 
 class PasswordScreen extends StatefulWidget {
-  final String phoneno;
+  final String email;
 
-  const PasswordScreen({Key? key, required this.phoneno}) : super(key: key);
+  const PasswordScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
@@ -240,7 +240,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                           // });
 
                           _extractData(
-                              context, widget.phoneno, passwordController.text);
+                              context, widget.email, passwordController.text);
 
                           // Navigator.push(
                           //     context,

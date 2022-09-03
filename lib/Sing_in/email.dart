@@ -16,7 +16,7 @@ class _SignInState extends State<SignIn> {
   bool validated = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String nun;
+  late String email;
 
   TextEditingController emailController = TextEditingController();
   bool isPassValidated = true;
@@ -38,16 +38,6 @@ class _SignInState extends State<SignIn> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.keyboard_arrow_left,
-            size: 30,
-            color: Colors.black,
-          ),
-        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -130,7 +120,7 @@ class _SignInState extends State<SignIn> {
                         hintText: 'username@email.com',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.emailAddress,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: emailController,
                       validator: (value) {
@@ -138,16 +128,16 @@ class _SignInState extends State<SignIn> {
                             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                         RegExp regex = RegExp(pattern.toString());
 
-                        if (value!.isNotEmpty) {
+                        if (value!.isEmpty) {
                           return 'please enter your email';
-                        } else if (value.length < 14) {
-                          return 'phone number should be more than 14 characters';
+                        } else if (value.length < 8) {
+                          return 'Email should be more than 7 characters';
                         }
                         return null;
                       },
                     ),
-                    // SizedBox(height: screenSize.height * 0.049),
                   ),
+                  SizedBox(height: screenSize.height * 0.049),
                   Visibility(
                     visible: (_formKey.currentState?.validate() ?? false),
                     child: OnBoardButton(
@@ -155,16 +145,17 @@ class _SignInState extends State<SignIn> {
                         label: 'Next',
                         onpressedfunction: () {
                           if (kDebugMode) {
-                            print(nun);
+                            print(email);
                           }
-                          if (_formKey.currentState!.validate()) return;
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: PasswordScreen(
-                                    phoneno: nun,
-                                  ),
-                                  type: PageTransitionType.rightToLeft));
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: PasswordScreen(
+                                      email: email,
+                                    ),
+                                    type: PageTransitionType.rightToLeft));
+                          }
                         }),
                   )
                 ],
