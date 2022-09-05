@@ -16,7 +16,7 @@ class _SignInState extends State<SignIn> {
   bool validated = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String email = email;
+  late String email;
 
   TextEditingController emailController = TextEditingController();
   bool isPassValidated = true;
@@ -60,59 +60,12 @@ class _SignInState extends State<SignIn> {
                   ),
                   SizedBox(height: screenSize.height * 0.049),
                   Container(
-                    decoration: BoxDecoration(),
-                    //   child: InternationalPhoneNumberInput(
-                    //     countries: ['NG'],
-                    //     spaceBetweenSelectorAndTextField: 0,
-                    //
-                    //     onInputChanged: (PhoneNumber number) {
-                    //       nun =  number.phoneNumber;
-                    //     },
-                    //     onInputValidated: (bool value) {
-                    //       print(value);
-                    //       setState(() {
-                    //         isPassValidated = value;
-                    //       });
-                    //     },
-                    //     validator: (value) {
-                    //       if (value.isEmpty) {
-                    //         return 'please enter your phone number';
-                    //       } else if (value.length < 9) {
-                    //         return 'phone number should be more than 11 characters';
-                    //       }
-                    //       return null;
-                    //     },
-                    //     countrySelectorScrollControlled: true,
-                    //     selectorConfig: SelectorConfig(
-                    //       leadingPadding: 00,
-                    //       trailingSpace: true,
-                    //       selectorType: PhoneInputSelectorType.DROPDOWN,
-                    //       showFlags: true,
-                    //     ),
-                    //     ignoreBlank: false,
-                    //     autoValidateMode: AutovalidateMode.onUserInteraction,
-                    //     selectorTextStyle: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),
-                    //
-                    //     textStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),
-                    //     initialValue: number,
-                    //     textFieldController: phoneController,
-                    //     formatInput: true,
-                    //
-                    //     textAlign:TextAlign.start ,
-                    //     inputBorder: UnderlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //           color: AppColors.blue,
-                    //         )),
-                    //     onSaved: (PhoneNumber number) {
-                    //       print('On Saved: $number');
-                    //     },
-                    //   ),
-                    // ),
+                    decoration: const BoxDecoration(),
                     child: TextFormField(
                         textInputAction: TextInputAction.done,
                         autofocus: true,
                         onChanged: (val) {
-                          setState(() {});
+                          //email = val;
                         },
                         decoration: const InputDecoration(
                           labelText: 'Email',
@@ -143,14 +96,17 @@ class _SignInState extends State<SignIn> {
                         color: Colors.lightBlue,
                         label: 'Next',
                         onpressedfunction: () {
-                          if (!_formKey.currentState!.validate()) return;
+                          if (_formKey.currentState!.validate()) return;
+                          if (kDebugMode) {
+                            print(email);
+                          }
                           Navigator.push(
                               context,
                               PageTransition(
                                   child: PasswordScreen(
                                     email: email,
                                   ),
-                                  type: PageTransitionType.rightToLeft));
+                                  type: PageTransitionType.leftToRight));
                         }),
                   )
                 ],
