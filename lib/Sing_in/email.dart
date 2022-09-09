@@ -14,9 +14,10 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   bool validated = true;
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String email;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //late String email;
 
   TextEditingController emailController = TextEditingController();
   bool isPassValidated = true;
@@ -96,10 +97,10 @@ class _SignInState extends State<SignIn> {
                         color: Colors.lightBlue,
                         label: 'Next',
                         onpressedfunction: () {
-                          if (_formKey.currentState!.validate()) return;
-                          if (kDebugMode) {
-                            print(email);
-                          }
+                          email = emailController.text;
+                          if (!_formKey.currentState!.validate()) return;
+                          debugPrint(email);
+
                           Navigator.push(
                               context,
                               PageTransition(
