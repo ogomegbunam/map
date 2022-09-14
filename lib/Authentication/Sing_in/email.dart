@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:map/Sing_in/Singup/sing_up.dart';
-import 'package:map/Sing_in/password.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:map/Authentication/Sing_in/password.dart';
 
-import '../widgets/on-board_button.dart';
+import 'package:page_transition/page_transition.dart';
+import '../../widgets/on-board_button.dart';
+import '../Singup/sing_up.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

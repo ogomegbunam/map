@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../widgets/on-board_button.dart';
+import '../../widgets/on-board_button.dart';
 
 class PasswordScreen extends StatefulWidget {
   final String email;
