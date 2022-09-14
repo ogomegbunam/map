@@ -101,13 +101,7 @@ class _SignInState extends State<SignIn> {
                         width: 10,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: SignUp(),
-                                  type: PageTransitionType.leftToRight));
-                        },
+                        onTap: () {},
                         child: const Text(
                           'Sing Up',
                           style: TextStyle(color: Colors.lightBlue),

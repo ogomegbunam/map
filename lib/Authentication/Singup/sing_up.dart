@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:map/services/firebase_services.dart';
 
 import '../../widgets/on-board_button.dart';
 
@@ -35,17 +37,31 @@ class _SignUpState extends State<SignUp> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  void UserSingup() async {
+    FirebaseAuthMethods(FirebaseAuth.instance).Signup(
+        emailAddress: emailController.text,
+        password: passwordController.text,
+        context: context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.loggedOut) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('You have been logged out.'),
-        ));
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   if (widget.loggedOut) {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text('You have been logged out.'),
+    //     ));
+    //   }
+    // });
   }
 
   @override
@@ -68,7 +84,7 @@ class _SignUpState extends State<SignUp> {
                     const Text(
                       'SIGN UP',
                       style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
+                      TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -108,7 +124,7 @@ class _SignUpState extends State<SignUp> {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                             prefixIcon: Icon(FontAwesomeIcons.envelope),
                             prefixIconColor: Colors.grey,
                             focusColor: null,
@@ -161,7 +177,7 @@ class _SignUpState extends State<SignUp> {
                             prefixIconColor: Colors.grey,
                             focusColor: null,
                             hintText: 'Password',
-                            hintStyle: TextStyle(fontSize: 12),
+                            hintStyle: const TextStyle(fontSize: 12),
                             border: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),
@@ -173,19 +189,20 @@ class _SignUpState extends State<SignUp> {
                     OnBoardButton(
                       label: 'Sign up',
                       onpressedfunction:
-                          _formKey.currentState?.validate() == true
-                              ? () async {
-                                  context.loaderOverlay.show();
-                                  // final signinResult = await BackendRequest.signIn(
-                                  //   email: emailController.text,
-                                  //   password: passwordController.text,
-                                  // );
+                      _formKey.currentState?.validate() == true
+                          ? () async {
+                        context.loaderOverlay.show();
 
-                                  context.loaderOverlay.hide();
+                                  // final signinResult = await BackendRequest.signIn(
+                        //   email: emailController.text,
+                        //   password: passwordController.text,
+                        // );
+
+                        context.loaderOverlay.hide();
                                 }
-                              : () {
-                                  null;
-                                },
+                          : () {
+                        null;
+                      },
                       color: _formKey.currentState?.validate() == true
                           ? const Color(0xFF429BED)
                           : Colors.grey.shade400,
