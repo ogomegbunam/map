@@ -5,12 +5,12 @@ class OnBoardButton extends StatelessWidget {
   String label;
   Color color;
 
-  OnBoardButton(
-      {Key? key,
-      required this.color,
-      required this.onpressedfunction,
-      required this.label})
-      : super(key: key);
+  OnBoardButton({
+    Key? key,
+    required this.color,
+    required this.onpressedfunction,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

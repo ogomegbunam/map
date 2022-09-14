@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:map/Sing_in/Singup/sing_up.dart';
 import 'package:map/Sing_in/password.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -89,6 +90,30 @@ class _SignInState extends State<SignIn> {
 
                           return null;
                         }),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      const Text('Not registered yet?'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: SignUp(),
+                                  type: PageTransitionType.leftToRight));
+                        },
+                        child: const Text(
+                          'Sing Up',
+                          style: TextStyle(color: Colors.lightBlue),
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(height: screenSize.height * 0.049),
                   Visibility(
