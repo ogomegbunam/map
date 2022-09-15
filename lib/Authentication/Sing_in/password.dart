@@ -60,8 +60,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       if (signin.user != null) {
         context.loaderOverlay.hide();
         ShowSnackBar(context, ' LogIn sucessful please login');
-
-        Navigator.push(
+         Navigator.push(
             context,
             PageTransition(
                 child: HomePage(), type: PageTransitionType.leftToRight));
