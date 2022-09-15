@@ -10,6 +10,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../Utils/snackbar.dart';
 import '../../widgets/on-board_button.dart';
+import '../Sing_in/email.dart';
 import '../Sing_in/password.dart';
 
 class SignUp extends StatefulWidget {
@@ -54,10 +55,12 @@ class _SignUpState extends State<SignUp> {
       );
       if (signup.user != null) {
         context.loaderOverlay.hide();
+        ShowSnackBar(context, ' Sign Up sucessful please login');
+
         Navigator.push(
             context,
             PageTransition(
-                child: HomePage(), type: PageTransitionType.leftToRight));
+                child: SignInScreen(), type: PageTransitionType.leftToRight));
       }
     } on FirebaseAuthException catch (e) {
       context.loaderOverlay.hide();

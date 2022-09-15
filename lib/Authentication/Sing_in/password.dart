@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:map/Authentication/Sing_in/email.dart';
+import 'package:map/home_page.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../Utils/snackbar.dart';
 import '../../widgets/on-board_button.dart';
@@ -53,8 +55,17 @@ class _PasswordScreenState extends State<PasswordScreen> {
       required String password,
       required BuildContext context}) async {
     try {
-      await FirebaseAuth.instance
+      final signin = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
+      if (signin.user != null) {
+        context.loaderOverlay.hide();
+        ShowSnackBar(context, ' LogIn sucessful please login');
+
+        Navigator.push(
+            context,
+            PageTransition(
+                child: HomePage(), type: PageTransitionType.leftToRight));
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ShowSnackBar(context, e.message!);
@@ -124,20 +135,20 @@ class _PasswordScreenState extends State<PasswordScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child:
-              // isLoading == true
-              //     ? Center(child: SpinKitFadingCircle(
-              //
-              //   itemBuilder: (BuildContext context, int index) {
-              //     return DecoratedBox(
-              //       decoration: BoxDecoration(
-              //
-              //         color:  AppColors.blue,
-              //       ),
-              //     );
-              //   },
-              // ),)
-              //     :
-              Form(
+                  // isLoading == true
+                  //     ? Center(child: SpinKitFadingCircle(
+                  //
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return DecoratedBox(
+                  //       decoration: BoxDecoration(
+                  //
+                  //         color:  AppColors.blue,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),)
+                  //     :
+                  Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +173,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       ],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        if (value!.isNotEmpty) {
+                        if (value!.isEmpty) {
                           return 'please enter password';
                         } else if (value.length < 6) {
                           return 'password should be more than 6 characters';
@@ -186,9 +197,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
                             },
                             icon: _hidePassword
                                 ? const Icon(Icons.visibility_off,
-                                color: Colors.grey)
+                                    color: Colors.grey)
                                 : const Icon(Icons.visibility,
-                                color: Colors.grey)),
+                                    color: Colors.grey)),
                         hintText: '*******',
                         hintStyle: const TextStyle(color: Colors.grey),
                       ),
