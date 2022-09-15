@@ -1,10 +1,16 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:map/Authentication/Sing_in/email.dart';
 
+import '../../Utils/snackbar.dart';
 import '../../widgets/on-board_button.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -29,73 +35,44 @@ class _PasswordScreenState extends State<PasswordScreen> {
     super.dispose();
   }
 
-  _showErrorSnack() {
-    const snackBar = SnackBar(
-        content: Text('Error Logging in please check phone or password'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  _extractData(
-    BuildContext context,
-    String phoneController,
-    String passwordControl,
-  ) async {
-    String email = phoneController.replaceAll(' ', "").replaceAll('+', '');
-
-    String password = passwordControl;
-
-    // await _logIn(context, email, password);
-
-    //  print(value);
-  }
-
-  // Future<void> _logIn(
-  //     BuildContext context,
-  //     String email,
-  //     String password,
-  //     ) async {
-  //   try {
-  //     // gets session
-  //     session = await NakamaClient.nakamaClient.authenticateEmail(
-  //       create: false,
-  //       email: email, // email,
-  //       password: password, // password,
-  //     );
-  //     await NakamaAdmin().login(
-  //       email: email,
-  //       password: password,
-  //     );
-  //     // gets account details
-  //     User.session = session;
-  //     _account = await NakamaClient.nakamaClient.getAccount(session);
+  // _extractData(
+  //   BuildContext context,
+  //   String phoneController,
+  //   String passwordControl,
+  // ) async {
+  //   String email = phoneController.replaceAll(' ', "").replaceAll('+', '');
   //
-  //   } catch (e) {
-  //     context.loaderOverlay.hide();
-  //     print(e);
-  //     _showErrorSnack();
-  //     context.loaderOverlay.hide();
-  //   } finally {
-  //     // setState(() {
-  //     //   isLoading = true;
-  //     // });
-  //     if (User.session.token != null) {
-  //       Navigator.push(
-  //           context,
-  //           PageTransition(
-  //               child: Home(), type: PageTransitionType.rightToLeft));
-  //       print(session);
-  //       print(_account);
-  //     }else{}
-  //     // if (NakamaAdmin().isLoggedIn) {
-  //     //   Navigator.push(
-  //     //       context,
-  //     //       PageTransition(
-  //     //           child: Home(), type: PageTransitionType.rightToLeft));
-  //     //   print(session);
-  //     //   print(_account);
-  //     // } else {}
-  //   }
+  //   String password = passwordControl;
+  //
+  //   SignIn()
+  //
+  //   //  print(value);
   // }
+  Future<void> Signin(
+      {required String emailAddress,
+      required String password,
+      required BuildContext context}) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: emailAddress, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ShowSnackBar(context, e.message!);
+        if (kDebugMode) {
+          print('No user found for that email.');
+        }
+      } else if (e.code == 'wrong-password') {
+        ShowSnackBar(context, e.message!);
+        if (kDebugMode) {
+          print('Wrong password provided for that user.');
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
 
   validateInput() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -147,20 +124,20 @@ class _PasswordScreenState extends State<PasswordScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child:
-                  // isLoading == true
-                  //     ? Center(child: SpinKitFadingCircle(
-                  //
-                  //   itemBuilder: (BuildContext context, int index) {
-                  //     return DecoratedBox(
-                  //       decoration: BoxDecoration(
-                  //
-                  //         color:  AppColors.blue,
-                  //       ),
-                  //     );
-                  //   },
-                  // ),)
-                  //     :
-                  Form(
+              // isLoading == true
+              //     ? Center(child: SpinKitFadingCircle(
+              //
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return DecoratedBox(
+              //       decoration: BoxDecoration(
+              //
+              //         color:  AppColors.blue,
+              //       ),
+              //     );
+              //   },
+              // ),)
+              //     :
+              Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,9 +186,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
                             },
                             icon: _hidePassword
                                 ? const Icon(Icons.visibility_off,
-                                    color: Colors.grey)
+                                color: Colors.grey)
                                 : const Icon(Icons.visibility,
-                                    color: Colors.grey)),
+                                color: Colors.grey)),
                         hintText: '*******',
                         hintStyle: const TextStyle(color: Colors.grey),
                       ),
@@ -239,8 +216,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
                           //   isLoading = true;
                           // });
 
-                          _extractData(
-                              context, widget.email, passwordController.text);
+                          Signin(
+                              emailAddress: widget.email,
+                              password: passwordController.text,
+                              context: context);
 
                           // Navigator.push(
                           //     context,

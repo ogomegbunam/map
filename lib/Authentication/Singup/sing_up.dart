@@ -43,8 +43,8 @@ class _SignUpState extends State<SignUp> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
-  Future<void> _Signup({required String emailAddress,
+  Future<void> _Signup({
+    required String emailAddress,
     required String password,
   }) async {
     try {
@@ -52,6 +52,13 @@ class _SignUpState extends State<SignUp> {
         email: emailController.text,
         password: passwordController.text,
       );
+      if (signup.user != null) {
+        context.loaderOverlay.hide();
+        Navigator.push(
+            context,
+            PageTransition(
+                child: HomePage(), type: PageTransitionType.leftToRight));
+      }
     } on FirebaseAuthException catch (e) {
       context.loaderOverlay.hide();
 
@@ -71,18 +78,7 @@ class _SignUpState extends State<SignUp> {
       if (kDebugMode) {
         print(e);
       }
-    } finally {
-      if (.user!= null) {
-        context.loaderOverlay.hide();
-        Navigator.push(
-            context,
-            PageTransition(
-                child: HomePage(
-
-                ),
-                type: PageTransitionType.leftToRight));
-      }
-    }
+    } finally {}
   }
   @override
   void dispose() {
@@ -124,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                     const Text(
                       'SIGN UP',
                       style:
-                      TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -164,7 +160,7 @@ class _SignUpState extends State<SignUp> {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                                EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                             prefixIcon: Icon(FontAwesomeIcons.envelope),
                             prefixIconColor: Colors.grey,
                             focusColor: null,
@@ -228,15 +224,17 @@ class _SignUpState extends State<SignUp> {
                     ),
                     OnBoardButton(
                       label: 'Sign up',
-                      onpressedfunction: _formKey.currentState?.validate() ==
-                          true
-                          ? () {
-                        context.loaderOverlay.show();
-                        _Signup(emailAddress: emailController.text,
-                            password: passwordController.text);
-                      } : () {
-                        null;
-                      },
+                      onpressedfunction:
+                          _formKey.currentState?.validate() == true
+                              ? () {
+                                  context.loaderOverlay.show();
+                                  _Signup(
+                                      emailAddress: emailController.text,
+                                      password: passwordController.text);
+                                }
+                              : () {
+                                  null;
+                                },
                       color: _formKey.currentState?.validate() == true
                           ? const Color(0xFF429BED)
                           : Colors.grey.shade400,

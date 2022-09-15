@@ -6,14 +6,14 @@ import 'package:page_transition/page_transition.dart';
 import '../../widgets/on-board_button.dart';
 import '../Singup/sing_up.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInScreenState extends State<SignInScreen> {
   bool validated = true;
   late String email;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
