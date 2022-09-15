@@ -1,11 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:map/home_page.dart';
 import 'package:map/services/firebase_services.dart';
+import 'package:page_transition/page_transition.dart';
 
+import '../../Utils/snackbar.dart';
 import '../../widgets/on-board_button.dart';
+import '../Sing_in/password.dart';
 
 class SignUp extends StatefulWidget {
   bool loggedOut;
@@ -23,6 +28,7 @@ class _SignUpState extends State<SignUp> {
   bool passVisibility = true;
   bool validated = true;
 
+
   validateInput() {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
@@ -37,13 +43,47 @@ class _SignUpState extends State<SignUp> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void UserSingup() async {
-    FirebaseAuthMethods(FirebaseAuth.instance).Signup(
-        emailAddress: emailController.text,
-        password: passwordController.text,
-        context: context);
-  }
 
+  Future<void> _Signup({required String emailAddress,
+    required String password,
+  }) async {
+    try {
+      final signup = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      context.loaderOverlay.hide();
+
+      if (e.code == 'weak-password') {
+        ShowSnackBar(context, e.message!);
+
+        if (kDebugMode) {
+          print('The password provided is too weak.');
+        }
+      } else if (e.code == 'email-already-in-use') {
+        ShowSnackBar(context, e.message!);
+        if (kDebugMode) {
+          print('The account already exists for that email.');
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      if (.user!= null) {
+        context.loaderOverlay.hide();
+        Navigator.push(
+            context,
+            PageTransition(
+                child: HomePage(
+
+                ),
+                type: PageTransitionType.leftToRight));
+      }
+    }
+  }
   @override
   void dispose() {
     super.dispose();
@@ -188,19 +228,13 @@ class _SignUpState extends State<SignUp> {
                     ),
                     OnBoardButton(
                       label: 'Sign up',
-                      onpressedfunction:
-                      _formKey.currentState?.validate() == true
-                          ? () async {
+                      onpressedfunction: _formKey.currentState?.validate() ==
+                          true
+                          ? () {
                         context.loaderOverlay.show();
-
-                                  // final signinResult = await BackendRequest.signIn(
-                        //   email: emailController.text,
-                        //   password: passwordController.text,
-                        // );
-
-                        context.loaderOverlay.hide();
-                                }
-                          : () {
+                        _Signup(emailAddress: emailController.text,
+                            password: passwordController.text);
+                      } : () {
                         null;
                       },
                       color: _formKey.currentState?.validate() == true
